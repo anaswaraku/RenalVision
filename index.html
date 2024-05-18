@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Classification</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cute+Font&family=Gamja+Flower&family=Josefin+Sans:wght@600&family=Jost:wght@200;700&family=Kalam:wght@300;400;700&family=Lakki+Reddy&family=Merriweather&family=Permanent+Marker&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Roboto+Condensed:wght@400;800&family=Rubik+Vinyl&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Sue+Ellen+Francisco&family=Vesper+Libre:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<style>
+  .navbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f2f2f2;
+    height: auto;
+    margin: 5px 5px;
+    background-color: #f2f2f2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
+    border-radius: 30px;
+  }
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+  }
+
+  .navbar-logo img {
+    max-width: 300px;
+    max-height: 82px;
+    /* Limit the maximum height of the logo */
+    width: auto;
+    height: auto;
+  }
+
+  .navbar-links {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+  }
+
+  .navbar-links a {
+    text-decoration: none;
+    font-size: medium;
+    font-family: "Space Grotesk", sans-serif;
+    margin-left: 15px;
+    margin-top: 20px;
+    color: #333;
+    /* border-bottom: 2px solid #34a853; */
+  }
+
+  .navbar-links a:hover {
+    color: #34a853;
+  }
+
+  .about {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .about p {
+    width: 70%;
+    text-align: center;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 500;
+    font-size: 32px;
+  }
+
+  .predict {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #ctimage {
+    width: auto;
+    height: auto;
+  }
+
+  #predictButton {
+    border: none;
+    color: rgb(47, 40, 40);
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: rgb(181, 163, 137);
+    color: black;
+    border-radius: 10px;
+  }
+
+  #predictButton:hover {
+    background-color: #008CBA;
+    color: white;
+  }
+</style>
+
+<body>
+  <nav class="navbar">
+    <h1 class="navbar-logo">
+      RENALVISION
+    </h1>
+    <div class="navbar-links">
+      <a href="#predict">TRY</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </nav>
+  <div class="about">
+    <p>
+      Renal Vision is an efficient online tool using advanced technology to swiftly detect kidney diseases. With
+        automated
+        processes, it provides quick and accurate assessments, enabling timely intervention for better kidney health
+        management.
+   </p>
+  </div>
+
+  <div class="predict" id="predict">
+    <p style=" font-size: 25px;"><b>Discover the health of your kidney</b></p>
+    <label for="fileInput">Upload your CT image</label>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+
+      <input type="file" id="fileInput" accept="image/*" required onchange="CTimage(this)">
+    </form>
+
+    <div id="predictionResult">
+      <h2 id="predictionText" style="color: rgb(66, 220, 163);"></h2>
+      <span id="predictionProbability"></span>
+      <!-- Display the uploaded image <img id="uploadedImage" alt="Uploaded Image" style="display: none; max-width: 100%;" />
+        <div id="imageContainer">
+            <img id="ctimage" src="#" alt="Your image">
+        </div>-->
+    </div>
+
+    <button type="submit" id="predictButton" onclick="predictionResult()">Predict</button>
+    <p id="predictionResult"></p>
+  </div>
+  <style>
+    .quote {
+      justify-content: center;
+      display: flex;
+      /*animation: fade-in 7s ease infinite;*/
+    }
+
+    @keyframes fade-in {
+
+      0%,
+      100% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .quote p {
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-size: 30px;
+      color: brown;
+    }
+  </style>
+  <div class="quote">
+    <p>"Face your ailment fearlessly with hope."</p>
+  </div>
+
+  <style>
+    .faq {
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      align-items: center;
+    }
+
+    .faquestion {
+      padding: 30px;
+      transition: background-color 0.3s;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      font-size: 28px;
+    }
+
+    .faquestion:hover {
+      background-color: transparent;
+    }
+
+    .answer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: black;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      width: 100%;
+      height: auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      font-size: 28px;
+
+    }
+
+    .faq:hover .answer {
+      opacity: 1;
+      position: relative;
+    }
+
+    .faq:hover .faquestion {
+      opacity: 0;
+    }
+  </style>
+
+  <div class="container" id="faq"
+    style="justify-content: center; align-items: center; flex-direction: column; display: flex;">
+    <h1>Frequently asked questions</h1>
+    <div class="faq">
+      <div class="faquestion">
+        <p>Can a person live without kidneys?</p>
+      </div>
+      <div class="answer">
+        <p><b>Can a person live without kidneys?</b><br>Technically, people can live with no kidneys, but require
+          dialysis</p>
+      </div>
+    </div>
+
+
+    <div class="faq">
+      <div class="faquestion">
+        <p>How does kidney disease affect your life?</p>
+      </div>
+      <div class="answer">
+        <p><b>How does kidney disease affect your life?</b><br>When your kidneys do not work as well as they should, you
+          have a higher chance of having other health problems (also
+          called complications). Some of the common health problems caused by kidney disease include gout,
+          anemia,secondary
+          hyperparathyroidism (SHPT), bone disease, heart disease and fluid buildup.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="faquestion">
+        <p>Can a human live without 2 kidneys?</p>
+      </div>
+      <div class="answer">
+        <p><b>Can a human live without 2 kidneys?</b>
+          <br>The loss in kidney function is usually mild, and life span is not impacted. Most people with one kidney
+          live healthy,
+          normal lives with few problems. In other words, one healthy kidney can work as well as two. There may be a
+          chance of
+          having high blood pressure.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="script.js"></script>
+  <style>
+    @media screen and (max-width: 768px) {
+      .faq {
+        width: 90%;
+        margin: 20px auto;
+      }
+
+      .faquestion {
+        padding: 20px;
+        font-size: 22px;
+      }
+
+      .answer {
+        font-size: 20px;
+        padding: 20px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .faq {
+        width: 90%;
+        margin: 20px auto;
+      }
+
+      .faquestion {
+        padding: 15px;
+        font-size: 18px;
+      }
+
+      .answer {
+        font-size: 16px;
+        padding: 15px;
+      }
+    }
+  </style>
+</body>
+
+</html>
