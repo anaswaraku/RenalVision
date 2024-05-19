@@ -125,6 +125,20 @@
       <a href="#faq">FAQ</a>
     </div>
   </nav>
+
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+      <input class="btn btn-primary btn-lg btn-default" id="file" type="file" name="file" accept=".jpg, .jpeg, .png"
+        required>
+      <button class="btn btn-primary btn-lg btn-default" id="predictButton" type="button">PREDICT</button>
+    </form>
+    
+    <div id="predictionResult">
+      <h2 id="predictionText" style="color: rgb(66, 220, 163);"></h2>
+      <span id="predictionProbability"></span>
+      <!-- Display the uploaded image -->
+      <img id="uploadedImage" alt="Uploaded Image" style="display: none; max-width: 100%;" />
+    </div>
+
   <div class="about">
     <p>
       Renal Vision is an efficient online tool using advanced technology to swiftly detect kidney diseases. With
@@ -136,7 +150,7 @@
 
   <div class="predict" id="predict">
     <p style=" font-size: 25px;"><b>Discover the health of your kidney</b></p>
-    <label for="fileInput">Upload your CT image</label>
+    <!--<label for="fileInput">Upload your CT image</label>
     <form id="uploadForm" method="post" enctype="multipart/form-data">
 
       <input type="file" id="fileInput" accept="image/*" required onchange="CTimage(this)">
@@ -145,15 +159,30 @@
     <div id="predictionResult">
       <h2 id="predictionText" style="color: rgb(66, 220, 163);"></h2>
       <span id="predictionProbability"></span>
-      <!-- Display the uploaded image <img id="uploadedImage" alt="Uploaded Image" style="display: none; max-width: 100%;" />
+       Display the uploaded image <img id="uploadedImage" alt="Uploaded Image" style="display: none; max-width: 100%;" />
         <div id="imageContainer">
             <img id="ctimage" src="#" alt="Your image">
-        </div>-->
+        </div>
     </div>
 
     <button type="submit" id="predictButton" onclick="predictionResult()">Predict</button>
-    <p id="predictionResult"></p>
+    <p id="predictionResult"></p>-->
   </div>
+  <form id="uploadForm" method="post" enctype="multipart/form-data">
+    <input type="file" id="fileInput" accept="image/*" required onchange="CTimage(this)">
+  </form>
+  
+  <div id="predictionResult">
+    <h2 id="predictionText" style="color: rgb(66, 220, 163);"></h2>
+    <span id="predictionProbability"></span>
+    <div id="imageContainer">
+      <img id="ctimage" alt="Your image" style="max-width: 100%;">
+    </div>
+  </div>
+  
+  <button type="button" id="predictButton" onclick="predictionResult()">Predict</button>
+  <p id="predictionResult"></p>
+
   <style>
     .quote {
       justify-content: center;
@@ -278,9 +307,6 @@
     </div>
   </div>
 
-
-
-  <script src="script.js"></script>
   <style>
     @media screen and (max-width: 768px) {
       .faq {
@@ -316,6 +342,7 @@
       }
     }
   </style>
+  <script src="/script.js"></script>
 </body>
 
 </html>
