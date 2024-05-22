@@ -39,7 +39,27 @@ nav ul li a:hover {
   color: #7a2a59;
 }
 
-/* General styles */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 5%;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 10px 2%;
+  }
+
+  .logo {
+    font-size: 1.4em;
+  }
+
+  nav ul li a {
+    font-size: 0.9em;
+  }
+}
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
