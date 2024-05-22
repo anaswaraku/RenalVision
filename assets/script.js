@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     async function uploadAndPredict() {
-        const loadedModel = await tf.loadLayersModel('../model/model.json');
+        const loadedModel = await tf.loadLayersModel('model/model.json');
         const fileInput = document.getElementById('file');
         const file = fileInput.files[0];
 
