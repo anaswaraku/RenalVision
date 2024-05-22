@@ -49,17 +49,40 @@ nav ul li a:hover {
 
 @media (max-width: 480px) {
   header {
-    padding: 10px 2%;
+    padding: 10px 5%;
   }
 
   .logo {
     font-size: 1.4em;
   }
 
+  nav ul {
+    display: none; /* Hide the navigation menu by default */
+    flex-direction: column;
+    width: 100%;
+  }
+
+  nav ul.show {
+    display: flex; /* Show the navigation menu when toggled */
+  }
+
+  nav ul li {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
   nav ul li a {
-    font-size: 0.9em;
+    font-size: 1em;
+  }
+
+  .menu-toggle {
+    display: block; /* Show the menu toggle button */
+    cursor: pointer;
+    font-size: 1.4em;
+    color: #333333;
   }
 }
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -275,7 +298,8 @@ body {
 }
 
 .quote p {
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   font-size: 1.5em;
   color: #7a2a59;
   margin: 0;
@@ -300,7 +324,8 @@ body {
 }
 
 @keyframes fade-in {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
   }
   50% {
